@@ -1,0 +1,21 @@
+1.在首页中的商品种类列表里使用上下文渲染器，减少代码的重写
+    在 shop app中建一个content_processors文件，写业务代码
+    把渲染器的路径添加到settings中的TEMPLATES中
+2. 在settings中配置redis缓存,把首页放到缓存中，减少服务器压力
+        CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://127.0.0.1:6379",  # redis的ip地址
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",  # 使用redis默认的缓存
+            }
+        }
+    }
+3.在新品推荐中使用自定义标签
+    首先在需要使用自定义标签的app中建一个python包名称为templatetags(名字是固定的)
+        在包中新建一个tags.py文件
+           from django import template
+           register = template.Library() 注：此行代码必须写
+           然后写业务代码
+4.用户浏览记录业务中使用缓存完成
+    使用列表类型的数据结构，其中key为用户的id或者浏览器中的cookie，value为商品id

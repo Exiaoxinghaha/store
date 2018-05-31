@@ -1,0 +1,61 @@
+<button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal">
+    增加收货人信息
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">新增收获人</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'account:user_center_site' %}" method="post" id="address_form_ajax">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="">收货人</label><span style="color: red">*</span>
+                        <input type="text" name="receiver_name" class="form-control" placeholder="请填写收货人(最多十个字符，必填)">
+                    </div>
+                    <div class="form-group">
+                        <label for="">城市</label>
+                        <input type="text" name="receiver_city" class="form-control" placeholder="请填写所在城市(选填)">
+                    </div>
+                    <div class="form-group">
+                        <label for="">联系电话</label><span style="color: red">*</span>
+                        <input type="text" name="receiver_telephone" class="form-control" placeholder="请填写有效的练习电话(必填)">
+                    </div>
+                    <div class="form-group">
+                        <label for="">详细地址</label><span style="color: red">*</span>
+                        <textarea name="receiver_address" class="form-control" cols="7" rows="3" placeholder="请填写详细的地址(必填)"></textarea>
+                    </div>
+                    <div class="error" style="color: red"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取&nbsp;&nbsp;消</button>
+                        <button type="submit" class="btn btn-primary" id="clear" onclick="clear()">确&nbsp;&nbsp;定</button>
+                    </div>
+                    <input type="reset" style="display: none">
+                </form>
+                <script>
+                    $('#address_form_ajax').submit(function () {
+                        url = $(this).attr('action');
+                        data = $(this).serializeArray();
+                        $.post(url,data,function (data) {
+                            if(data.status==0){
+                                window.location.href = url
+                            }else{
+                                error = '带 * 的为必填项，你的输入不符合要求'
+                                $('.error').html(error)
+                            }
+                        });
+
+                        return false
+                    });
+
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>

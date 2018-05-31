@@ -1,0 +1,83 @@
+<button type="button" class="btn btn-danger pull-right edit_user_info" data-toggle="modal" data-target="#myModal">
+    编辑个人信息
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">编辑个人信息</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{% url 'account:edit_user_info' %}" id="modify_userinfo_form_ajax" method="post">
+                    {% csrf_token %}
+{#                    <div class="form-group">#}
+{#                        <label for="">姓名</label>#}
+{#                        <input type="text" name="name" class="form-control" placeholder="请填写性别">#}
+{#                    </div>#}
+                    <div class="form-group">
+                        <label for="">性别</label>
+                        <input type="text" name="gender" class="form-control" placeholder="请填写性别">
+                    </div>
+                    <div class="form-group">
+                        <label for="">城市</label>
+                        <input type="text" name="city" class="form-control" placeholder="填写所在城市">
+                    </div>
+                    <div class="form-group">
+                        <label for="">联系电话</label>
+                        <input type="text" name="telephone" class="form-control" placeholder="填写有效的练习电话">
+                    </div>
+                    <div class="form-group">
+                        <label for="">联系地址</label>
+                        <textarea name="address" class="form-control" cols="7" rows="3"
+                                  placeholder="请填写详细的地址"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取&nbsp;&nbsp;消</button>
+                        <button type="submit" class="btn btn-primary " id="clear" onclick="clear()">确&nbsp;&nbsp;定</button>
+                    </div>
+                    <input type="reset" style="display: none">
+                </form>
+                <script>
+                    $(function () {
+                            $('.edit_user_info').click(function () {
+                            $.ajax({
+                                type:'GET',
+                                url:"{% url 'account:edit_user_info_ajax' %}",
+                                data:{'data':''},
+                                dataType:'json',
+                                success:function (data) {
+                                    $("input[name='gender']").val(data.gender);
+                                    $("input[name='city']").val(data.city);
+                                    {#$("input[name='name']").val(data.name);#}
+                                    $("input[name='telephone']").val(data.telephone);
+                                    $("textarea[name='address']").val(data.address);
+                                }
+                            })
+                        });
+
+                    });
+                    $('#modify_userinfo_form_ajax').submit(function () {
+                            url = $(this).attr('action');
+                            data = $(this).serializeArray();
+                            $.post(url,data,function (data) {
+                                if(data.status==0){
+                                    window.location.href = '{% url 'account:user_center_info' %}'
+                                }else{
+                                    error = '带 * 的为必填项，你的输入不符合要求';
+                                    $('.error').html(error)
+                                }
+                            });
+
+                            return false
+                        });
+
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>

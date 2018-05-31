@@ -1,0 +1,56 @@
+{% extends 'shop_base.html' %}
+{% load static %}
+{% load cache %}
+{% block index_content %}
+    {% cache 10 content %}
+     <div class="center_con clearfix">
+        <ul class="subnav fl">
+            <li><a href="{% url 'shop:categroys' 1 %}" class="fruit">{{ categorys.0 }}</a></li>
+            <li><a href="{% url 'shop:categroys' 2 %}" class="seafood">{{ categorys.1 }}</a></li>
+            <li><a href="{% url 'shop:categroys' 3 %}" class="meet">{{ categorys.2 }}</a></li>
+            <li><a href="{% url 'shop:categroys' 4 %}" class="egg">{{ categorys.3 }}</a></li>
+            <li><a href="{% url 'shop:categroys' 5 %}" class="vegetables">{{ categorys.4 }}</a></li>
+            <li><a href="{% url 'shop:categroys' 6 %}" class="ice">{{ categorys.5}}</a></li>
+        </ul>
+
+        <div class="slide fl">
+            <ul class="slide_pics">
+                <li><img src="{% static 'images/slide.jpg' %}" alt="幻灯片"></li>
+                <li><img src="{% static 'images/slide02.jpg' %}" alt="幻灯片"></li>
+                <li><img src="{% static 'images/slide03.jpg' %}" alt="幻灯片"></li>
+                <li><img src="{% static 'images/slide04.jpg' %}" alt="幻灯片"></li>
+            </ul>
+            <div class="prev"></div>
+            <div class="next"></div>
+            <ul class="points"></ul>
+        </div>
+        <div class="adv fl">
+            <a href="#"><img src="{% static 'images/adv01.jpg' %}"></a>
+            <a href="#"><img src="{% static 'images/adv02.jpg' %}"></a>
+        </div>
+    </div>
+    {% for item in goods_list %}
+        <div class="list_model">
+            <div class="list_title clearfix">
+                <h3 class="fl" id="model0{{ forloop.counter }}">{{ item.category.name }}</h3>
+                <a href="{% url 'shop:categroys' item.category.id %}" class="goods_more fr" id="fruit_more">查看更多 ></a>
+            </div>
+                <div class="goods_con clearfix">
+                    <div class="goods_banner fl"><img src="{{ STATIC_URL }}images/banner0{{ forloop.counter }}.jpg"></div>
+                    <ul class="goods_list fl">
+                        {% for item in item.goodsinfos %}
+                         <li>
+                            <h4><a href="{% url 'shop:goods_deatil' item.id %}">{{ item.name }}</a></h4>
+                            <a href="{% url 'shop:goods_deatil' item.id %}"><img src="{{ MEDIA_URL }}{{ item.images }}"></a>
+                            <div class="prize">¥ {{ item.price }}</div>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                </div>
+    {% endfor %}
+    {% endcache content %}
+{% endblock index_content %}
+
+
